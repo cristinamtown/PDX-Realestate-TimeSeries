@@ -493,7 +493,7 @@ df_portmelt.isnull().sum()
 The first plot we will look at is a plot of the average price of homes from all zipcodes in Portland through the years.
 
 
-![png](image/first_plot.png)
+![png](images/first_plot.png)
 
 
 With this initial graph, we can see the overall pattern of all Portland throughout the years. We can see there is a general upward trend with a drop off in 2008 to 2012  which is indicative of the 2008 recession. 
@@ -501,11 +501,11 @@ With this initial graph, we can see the overall pattern of all Portland througho
 Next we are will look at boxplots and line plot of average price per zipcode. Before we plot the data, we need to group by zipcode (the "RegionName" zipcode).
 
 
-![png](image/box_plot.png)
+![png](images/box_plot.png)
 
 
 
-![png](image/zip_line_plot.png)
+![png](images/zip_line_plot.png)
 
 
 From the two plots above, we can see that 97210 is has a higher average price than the rest of the zipcodes in Portland. We can also see that all zipcodes follow the same trend due to the recession in 2008. 
