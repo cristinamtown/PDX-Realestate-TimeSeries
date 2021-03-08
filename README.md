@@ -206,17 +206,7 @@ Time frame: 1996-01-01 to 2020-01-01
 </div>
 
 
-Now that we have a basic idea of the data, we need to start filtering for Portland, Oregon. Since there are multiple Portlands in the United States, we will first drop any rows that are outside or Oregon.
-
-
-```python
-df_or = df.copy()
-df_or = df_or[df_or.State == 'OR']
-df_or.head()
-```
-
-
-Now we can create our Portland dataframe and print the head to quickly check that it worked the way we wanted it to.
+Now that we have a basic idea of the data, we need to start filtering for Portland, Oregon. Since there are multiple Portlands in the United States, we will first drop any rows that are outside of Oregon. Then we can create our Portland dataframe and print the head to quickly check that it worked the way we wanted it to.
 
 
 ```python
@@ -396,8 +386,7 @@ df_port.head()
 
 
 
-We can drop ['City','State', 'StateName', 'Metro', 'SizeRank', 'CountyName', 
-                     'RegionID', 'RegionType'] columns since all the data in those columns are either repetitive or irrelevant. 
+We can drop 'City','State', 'StateName', 'Metro', 'SizeRank', 'CountyName', 'RegionID', 'RegionType' columns since all the data in those columns are either repetitive or irrelevant. 
 
 We now know that Portland has 28 zip codes listed in this data set. We will descide which 5 to focus after we preprocess it.
 
@@ -478,114 +467,11 @@ df_portmelt.head()
 </div>
 
 
+Now that we have our DataFrame in wide format, we can look at the specifically at the Portland zip codes and get our new DataFrame ready for modeling. 
 
-
-```python
-df_portmelt.info()
-```
-
-    <class 'pandas.core.frame.DataFrame'>
-    RangeIndex: 8428 entries, 0 to 8427
-    Data columns (total 3 columns):
-    RegionName    8428 non-null int64
-    Date          8428 non-null object
-    Avg_Price     8428 non-null float64
-    dtypes: float64(1), int64(1), object(1)
-    memory usage: 197.6+ KB
-
-
-
-```python
-# Convert Date to datetime
-df_portmelt['Date'] = pd.to_datetime(df_portmelt['Date'], format='%Y-%m')
-
-
-# Convert RegionName to string as it will be used catergorical not quantatively
-df_portmelt['RegionName'] = 'zip: ' + df_portmelt['RegionName'].astype(str)
-
-df_portmelt.info()
-```
-
-    <class 'pandas.core.frame.DataFrame'>
-    RangeIndex: 8428 entries, 0 to 8427
-    Data columns (total 3 columns):
-    RegionName    8428 non-null object
-    Date          8428 non-null datetime64[ns]
-    Avg_Price     8428 non-null float64
-    dtypes: datetime64[ns](1), float64(1), object(1)
-    memory usage: 197.6+ KB
-
-
-
-```python
-# ensure it worked as intended
-df_portmelt.head()
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>RegionName</th>
-      <th>Date</th>
-      <th>Avg_Price</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>zip: 97229</td>
-      <td>1996-01-01</td>
-      <td>221270.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>zip: 97206</td>
-      <td>1996-01-01</td>
-      <td>102538.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>zip: 97202</td>
-      <td>1996-01-01</td>
-      <td>145404.0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>zip: 97219</td>
-      <td>1996-01-01</td>
-      <td>171425.0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>zip: 97217</td>
-      <td>1996-01-01</td>
-      <td>95801.0</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-Quickly check for null values but from the examination of .info() above, there should not be any. 
+- First we convert the column 'Date' to datetime format.
+- Then we convert RegionName to string as it will be used catergorical not quantatively. We ensure that by add "zip: " before each zipcode.
+- Finally, we quickly check for null values but from the examination of .info() above, there should not be any. 
 
 
 ```python
@@ -607,91 +493,25 @@ df_portmelt.isnull().sum()
 The first plot we will look at is a plot of the average price of homes from all zipcodes in Portland through the years.
 
 
-```python
-df_portmelt.plot(x='Date', y='Avg_Price', figsize = (22,8))
-plt.show()
-```
-
-
-![png](output_27_0.png)
+![png](image/first_plot.png)
 
 
 With this initial graph, we can see the overall pattern of all Portland throughout the years. We can see there is a general upward trend with a drop off in 2008 to 2012  which is indicative of the 2008 recession. 
 
-Next we are will look at boxplots of average price per zipcode. Before we plot the data, we need to group by zipcode (the "RegionName" zipcode).
+Next we are will look at boxplots and line plot of average price per zipcode. Before we plot the data, we need to group by zipcode (the "RegionName" zipcode).
 
 
-```python
-# Create df to sort boxplot by median
-grouped = df_portmelt.groupby(["RegionName"])
-
-df2 = pd.DataFrame({col:vals['Avg_Price'] for col,vals in grouped})
-
-# Sort medians from high to low
-meds = df2.median()
-meds.sort_values(ascending=False, inplace=True)
-df2 = df2[meds.index]
-```
-
-
-```python
-plt.figure(figsize=(16, 8))
-ax = sns.boxplot(data=df2)
-ax.set_xticklabels(ax.get_xticklabels(), rotation=45);
-```
-
-
-![png](output_31_0.png)
-
-
-Next we will look at a plot of the average price per zipcode through the years.
-
-
-```python
-import matplotlib.dates as mdates
-plt.figure(figsize=(16, 8))
-sns.lineplot(data=df_portmelt, x='Date', y='Avg_Price', hue='RegionName')
-```
+![png](image/box_plot.png)
 
 
 
-
-    <AxesSubplot:xlabel='Date', ylabel='Avg_Price'>
-
-
-
-
-![png](output_33_1.png)
+![png](image/zip_line_plot.png)
 
 
 From the two plots above, we can see that 97210 is has a higher average price than the rest of the zipcodes in Portland. We can also see that all zipcodes follow the same trend due to the recession in 2008. 
 
-
-```python
-zip_list = list(df_portmelt['RegionName'].unique())
-# zip_list
-```
-
 In order to get a better look at the ranges and medians for the individual zipcodes. We will look at the top 5 of each to decide which we will focus on.
 
-
-```python
-# Create a DataFrame of range of the prices per zipcode
-range_list = []
-
-for x in zip_list:
-    temp = df2[x].max() - df2[x].min()
-    range_list.append(
-                {'Zipcode': x,
-                'Range': temp})
-    
-range_df = pd.DataFrame(range_list)
-range_df
-
-range_df = range_df.sort_values('Range', ascending=False)
-print(f'Top 5 ranges: \n{range_df.head()}')
-print(f'\nTop 5 medians: \n{meds.head()}')
-```
 
     Top 5 ranges: 
            Range     Zipcode
@@ -719,260 +539,7 @@ We'll focus on the three highest median average prices and four largest ranges.
 - 97914 (4th highest range)
 
 
-
-```python
-zip_focus = ['zip: 97210', 'zip: 97212', 'zip: 97232', 'zip: 97214', 'zip: 97221']
-```
-
-Group the dataframe so we will be able to create individual zipcode dataframes.
-
-
-```python
-temp = df_portmelt.copy()
-temp = temp.groupby('RegionName')
-temp.first()
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Date</th>
-      <th>Avg_Price</th>
-    </tr>
-    <tr>
-      <th>RegionName</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>zip: 97201</th>
-      <td>1996-01-01</td>
-      <td>219094.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97202</th>
-      <td>1996-01-01</td>
-      <td>145404.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97203</th>
-      <td>1996-01-01</td>
-      <td>99409.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97204</th>
-      <td>1996-01-01</td>
-      <td>183837.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97205</th>
-      <td>1996-01-01</td>
-      <td>195339.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97206</th>
-      <td>1996-01-01</td>
-      <td>102538.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97209</th>
-      <td>1996-01-01</td>
-      <td>163810.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97210</th>
-      <td>1996-01-01</td>
-      <td>231512.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97211</th>
-      <td>1996-01-01</td>
-      <td>101364.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97212</th>
-      <td>1996-01-01</td>
-      <td>170442.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97213</th>
-      <td>1996-01-01</td>
-      <td>123521.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97214</th>
-      <td>1996-01-01</td>
-      <td>149018.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97215</th>
-      <td>1996-01-01</td>
-      <td>138201.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97216</th>
-      <td>1996-01-01</td>
-      <td>106248.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97217</th>
-      <td>1996-01-01</td>
-      <td>95801.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97218</th>
-      <td>1996-01-01</td>
-      <td>107178.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97219</th>
-      <td>1996-01-01</td>
-      <td>171425.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97220</th>
-      <td>1996-01-01</td>
-      <td>110009.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97221</th>
-      <td>1996-01-01</td>
-      <td>217339.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97227</th>
-      <td>1996-01-01</td>
-      <td>96387.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97229</th>
-      <td>1996-01-01</td>
-      <td>221270.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97230</th>
-      <td>1996-01-01</td>
-      <td>131686.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97231</th>
-      <td>1996-01-01</td>
-      <td>241177.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97232</th>
-      <td>1996-01-01</td>
-      <td>155597.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97233</th>
-      <td>1996-01-01</td>
-      <td>111151.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97236</th>
-      <td>1996-01-01</td>
-      <td>122135.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97239</th>
-      <td>1996-01-01</td>
-      <td>193652.0</td>
-    </tr>
-    <tr>
-      <th>zip: 97266</th>
-      <td>1996-01-01</td>
-      <td>106291.0</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-
-```python
-# Quick check
-temp.get_group(zip_focus[0]).head()
-
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Avg_Price</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>20</th>
-      <td>231512.0</td>
-      <td>1996-01-01</td>
-    </tr>
-    <tr>
-      <th>48</th>
-      <td>231908.0</td>
-      <td>1996-02-01</td>
-    </tr>
-    <tr>
-      <th>76</th>
-      <td>232733.0</td>
-      <td>1996-03-01</td>
-    </tr>
-    <tr>
-      <th>104</th>
-      <td>234455.0</td>
-      <td>1996-04-01</td>
-    </tr>
-    <tr>
-      <th>132</th>
-      <td>236666.0</td>
-      <td>1996-05-01</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
+Now that we know which zip codes we will be focusing on, we will group the dataframe by zip code so we will be able to create individual zipcode dataframes.
 
 
 ```python
@@ -986,6 +553,8 @@ df_97221 = temp.get_group(zip_focus[4])
 ```
 
 # Functions
+
+Now that we 
 
 ## train_test_split
 Will split data fed into the function into 90/10 train/test ratio. 
@@ -1251,6 +820,7 @@ def arima(data, series_order, season_order):
 ```
 
 ## ROI 
+
 This function calculates and the ROI based on the forecast in the ARIMA model. It plots and returns ROI as a dataframe.
 
 
