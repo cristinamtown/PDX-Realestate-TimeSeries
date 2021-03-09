@@ -554,7 +554,7 @@ df_97221 = temp.get_group(zip_focus[4])
 
 # Functions
 
-Now that we 
+Now that we have the five zipcodes we are focusing on, we will create some functions to streamline the process of preparing the data, modeling, and forecasting the data. 
 
 ## train_test_split
 Will split data fed into the function into 90/10 train/test ratio. 
@@ -857,127 +857,22 @@ arma_97210 = arma_prep('zip: 97210')
 ```
 
 
-![png](output_58_0.png)
+![png](images/output_58_0.png)
 
+From this, we can see that the data is not stationary. In prder to deal with this, we remove trends using differancing within our function. 
 
+![png](images/output_58_1.png)
 
-![png](output_58_1.png)
+Next, we can look at the correlation and the auto correlation.
 
+![png](images/output_58_2.png)
 
 
-![png](output_58_2.png)
 
+![png](images/output_58_3.png)
 
 
-![png](output_58_3.png)
-
-
-
-![png](output_58_4.png)
-
-
-
-```python
-# ARMA prep, differancing, autocorrelation, and partial autocorrelation for zipcode: 97212
-arma_97212 = arma_prep('zip: 97212')
-```
-
-
-![png](output_59_0.png)
-
-
-
-![png](output_59_1.png)
-
-
-
-![png](output_59_2.png)
-
-
-
-![png](output_59_3.png)
-
-
-
-![png](output_59_4.png)
-
-
-
-```python
-# ARMA prep, differancing, autocorrelation, and partial autocorrelation for zipcode: 97214
-arma_97214 = arma_prep('zip: 97214')
-```
-
-
-![png](output_60_0.png)
-
-
-
-![png](output_60_1.png)
-
-
-
-![png](output_60_2.png)
-
-
-
-![png](output_60_3.png)
-
-
-
-![png](output_60_4.png)
-
-
-
-```python
-# ARMA prep, differancing, autocorrelation, and partial autocorrelation for zipcode: 97221
-arma_97221 = arma_prep('zip: 97221')
-```
-
-
-![png](output_61_0.png)
-
-
-
-![png](output_61_1.png)
-
-
-
-![png](output_61_2.png)
-
-
-
-![png](output_61_3.png)
-
-
-
-![png](output_61_4.png)
-
-
-
-```python
-# ARMA prep, differancing, autocorrelation, and partial autocorrelation for zipcode: 97232
-arma_97232 = arma_prep('zip: 97232')
-```
-
-
-![png](output_62_0.png)
-
-
-
-![png](output_62_1.png)
-
-
-
-![png](output_62_2.png)
-
-
-
-![png](output_62_3.png)
-
-
-
-![png](output_62_4.png)
+We repeated that process for the 4 other zipcodes as well. 
 
 
 # Modeling
@@ -985,554 +880,58 @@ arma_97232 = arma_prep('zip: 97232')
 
 ## ARMA
 
-### Train Test Split
+1. Run the train test split function.
+2. Run the ARMA models for our 5 focus zipcodes. These will end up being our base models. 
 
 
-```python
-# Train test split for zip code 97210
-train_97210, test_97210 = train_test_split(arma_97210)
-```
-
-    Observations: 300
-    Training Observations: 270
-    Testing Observations: 30
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/pandas/plotting/_compat.py:57: MatplotlibDeprecationWarning: 
-    The compare_versions function was deprecated in Matplotlib 3.2 and will be removed two minor releases later.
-      return matplotlib.compare_versions('2.0.0', matplotlib.__version__)
-
-
-
-![png](output_66_2.png)
-
-
-
-```python
-# Train test split for zip code 97212
-train_97212, test_97212 = train_test_split(arma_97212)
-```
-
-    Observations: 300
-    Training Observations: 270
-    Testing Observations: 30
-
-
-
-![png](output_67_1.png)
-
-
-
-```python
-# Train test split for zip code 97214
-train_97214, test_97214 = train_test_split(arma_97214)
-```
-
-    Observations: 300
-    Training Observations: 270
-    Testing Observations: 30
-
-
-
-![png](output_68_1.png)
-
-
-
-```python
-# Train test split for zip code 97221
-train_97221, test_97221 = train_test_split(arma_97221)
-```
-
-    Observations: 300
-    Training Observations: 270
-    Testing Observations: 30
-
-
-
-![png](output_69_1.png)
-
-
-
-```python
-# Train test split for zip code 97232
-train_97232, test_97232 = train_test_split(arma_97232)
-```
-
-    Observations: 300
-    Training Observations: 270
-    Testing Observations: 30
-
-
-
-![png](output_70_1.png)
-
-
-### Model 
-
-
-```python
-# ARMA model for zip code 97210
-model_arma(train_97210, arma_97210)
-```
-
-    ARMA (1,0)Summary:
-    
-                                  ARMA Model Results                              
-    ==============================================================================
-    Dep. Variable:              Avg_Price   No. Observations:                  270
-    Model:                     ARMA(1, 0)   Log Likelihood               -2442.042
-    Method:                       css-mle   S.D. of innovations           2046.086
-    Date:                Sun, 07 Mar 2021   AIC                           4890.084
-    Time:                        13:53:54   BIC                           4900.879
-    Sample:                    02-01-1996   HQIC                          4894.419
-                             - 07-01-2018                                         
-    ===================================================================================
-                          coef    std err          z      P>|z|      [0.025      0.975]
-    -----------------------------------------------------------------------------------
-    const            1935.0181    646.378      2.994      0.003     668.140    3201.896
-    ar.L1.Avg_Price     0.8101      0.036     22.460      0.000       0.739       0.881
-                                        Roots                                    
-    =============================================================================
-                      Real          Imaginary           Modulus         Frequency
-    -----------------------------------------------------------------------------
-    AR.1            1.2343           +0.0000j            1.2343            0.0000
-    -----------------------------------------------------------------------------
-    
-    
-    ARMA (2,1) Summary:
-    
-                                  ARMA Model Results                              
-    ==============================================================================
-    Dep. Variable:              Avg_Price   No. Observations:                  270
-    Model:                     ARMA(1, 0)   Log Likelihood               -2442.042
-    Method:                       css-mle   S.D. of innovations           2046.086
-    Date:                Sun, 07 Mar 2021   AIC                           4890.084
-    Time:                        13:53:54   BIC                           4900.879
-    Sample:                    02-01-1996   HQIC                          4894.419
-                             - 07-01-2018                                         
-    ===================================================================================
-                          coef    std err          z      P>|z|      [0.025      0.975]
-    -----------------------------------------------------------------------------------
-    const            1935.0181    646.378      2.994      0.003     668.140    3201.896
-    ar.L1.Avg_Price     0.8101      0.036     22.460      0.000       0.739       0.881
-                                        Roots                                    
-    =============================================================================
-                      Real          Imaginary           Modulus         Frequency
-    -----------------------------------------------------------------------------
-    AR.1            1.2343           +0.0000j            1.2343            0.0000
-    -----------------------------------------------------------------------------
-    
-    
-    ARMA prediction vs true values
-
-
-
-![png](output_72_1.png)
-
-
-
-```python
-# ARMA model for zip code 97212
-model_arma(train_97212, arma_97212)
-```
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/tsa/base/tsa_model.py:162: ValueWarning: No frequency information was provided, so inferred frequency MS will be used.
-      % freq, ValueWarning)
-
-
-    ARMA (1,0)Summary:
-    
-                                  ARMA Model Results                              
-    ==============================================================================
-    Dep. Variable:              Avg_Price   No. Observations:                  270
-    Model:                     ARMA(1, 0)   Log Likelihood               -2398.019
-    Method:                       css-mle   S.D. of innovations           1738.357
-    Date:                Sun, 07 Mar 2021   AIC                           4802.039
-    Time:                        13:53:59   BIC                           4812.834
-    Sample:                    02-01-1996   HQIC                          4806.374
-                             - 07-01-2018                                         
-    ===================================================================================
-                          coef    std err          z      P>|z|      [0.025      0.975]
-    -----------------------------------------------------------------------------------
-    const            1760.9977    530.111      3.322      0.001     721.999    2799.996
-    ar.L1.Avg_Price     0.8033      0.036     22.100      0.000       0.732       0.874
-                                        Roots                                    
-    =============================================================================
-                      Real          Imaginary           Modulus         Frequency
-    -----------------------------------------------------------------------------
-    AR.1            1.2449           +0.0000j            1.2449            0.0000
-    -----------------------------------------------------------------------------
-    
-    
-    ARMA (2,1) Summary:
-    
-                                  ARMA Model Results                              
-    ==============================================================================
-    Dep. Variable:              Avg_Price   No. Observations:                  270
-    Model:                     ARMA(1, 0)   Log Likelihood               -2398.019
-    Method:                       css-mle   S.D. of innovations           1738.357
-    Date:                Sun, 07 Mar 2021   AIC                           4802.039
-    Time:                        13:53:59   BIC                           4812.834
-    Sample:                    02-01-1996   HQIC                          4806.374
-                             - 07-01-2018                                         
-    ===================================================================================
-                          coef    std err          z      P>|z|      [0.025      0.975]
-    -----------------------------------------------------------------------------------
-    const            1760.9977    530.111      3.322      0.001     721.999    2799.996
-    ar.L1.Avg_Price     0.8033      0.036     22.100      0.000       0.732       0.874
-                                        Roots                                    
-    =============================================================================
-                      Real          Imaginary           Modulus         Frequency
-    -----------------------------------------------------------------------------
-    AR.1            1.2449           +0.0000j            1.2449            0.0000
-    -----------------------------------------------------------------------------
-    
-    
-    ARMA prediction vs true values
-
-
-
-![png](output_73_2.png)
-
-
-
-```python
-# ARMA model for zip code 97214
-model_arma(train_97214, arma_97214)
-```
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/tsa/base/tsa_model.py:162: ValueWarning: No frequency information was provided, so inferred frequency MS will be used.
-      % freq, ValueWarning)
-
-
-    ARMA (1,0)Summary:
-    
-                                  ARMA Model Results                              
-    ==============================================================================
-    Dep. Variable:              Avg_Price   No. Observations:                  270
-    Model:                     ARMA(1, 0)   Log Likelihood               -2368.779
-    Method:                       css-mle   S.D. of innovations           1559.676
-    Date:                Sun, 07 Mar 2021   AIC                           4743.557
-    Time:                        13:53:59   BIC                           4754.352
-    Sample:                    02-01-1996   HQIC                          4747.892
-                             - 07-01-2018                                         
-    ===================================================================================
-                          coef    std err          z      P>|z|      [0.025      0.975]
-    -----------------------------------------------------------------------------------
-    const            1600.0717    523.549      3.056      0.002     573.934    2626.210
-    ar.L1.Avg_Price     0.8216      0.035     23.806      0.000       0.754       0.889
-                                        Roots                                    
-    =============================================================================
-                      Real          Imaginary           Modulus         Frequency
-    -----------------------------------------------------------------------------
-    AR.1            1.2171           +0.0000j            1.2171            0.0000
-    -----------------------------------------------------------------------------
-    
-    
-    ARMA (2,1) Summary:
-    
-                                  ARMA Model Results                              
-    ==============================================================================
-    Dep. Variable:              Avg_Price   No. Observations:                  270
-    Model:                     ARMA(1, 0)   Log Likelihood               -2368.779
-    Method:                       css-mle   S.D. of innovations           1559.676
-    Date:                Sun, 07 Mar 2021   AIC                           4743.557
-    Time:                        13:53:59   BIC                           4754.352
-    Sample:                    02-01-1996   HQIC                          4747.892
-                             - 07-01-2018                                         
-    ===================================================================================
-                          coef    std err          z      P>|z|      [0.025      0.975]
-    -----------------------------------------------------------------------------------
-    const            1600.0717    523.549      3.056      0.002     573.934    2626.210
-    ar.L1.Avg_Price     0.8216      0.035     23.806      0.000       0.754       0.889
-                                        Roots                                    
-    =============================================================================
-                      Real          Imaginary           Modulus         Frequency
-    -----------------------------------------------------------------------------
-    AR.1            1.2171           +0.0000j            1.2171            0.0000
-    -----------------------------------------------------------------------------
-    
-    
-    ARMA prediction vs true values
-
-
-
-![png](output_74_2.png)
-
-
-
-```python
-# ARMA model for zip code 97221
-model_arma(train_97221, arma_97221)
-```
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/tsa/base/tsa_model.py:162: ValueWarning: No frequency information was provided, so inferred frequency MS will be used.
-      % freq, ValueWarning)
-
-
-    ARMA (1,0)Summary:
-    
-                                  ARMA Model Results                              
-    ==============================================================================
-    Dep. Variable:              Avg_Price   No. Observations:                  270
-    Model:                     ARMA(1, 0)   Log Likelihood               -2357.617
-    Method:                       css-mle   S.D. of innovations           1496.002
-    Date:                Sun, 07 Mar 2021   AIC                           4721.234
-    Time:                        13:54:00   BIC                           4732.030
-    Sample:                    02-01-1996   HQIC                          4725.569
-                             - 07-01-2018                                         
-    ===================================================================================
-                          coef    std err          z      P>|z|      [0.025      0.975]
-    -----------------------------------------------------------------------------------
-    const            1445.7486    612.521      2.360      0.018     245.229    2646.268
-    ar.L1.Avg_Price     0.8545      0.031     27.400      0.000       0.793       0.916
-                                        Roots                                    
-    =============================================================================
-                      Real          Imaginary           Modulus         Frequency
-    -----------------------------------------------------------------------------
-    AR.1            1.1703           +0.0000j            1.1703            0.0000
-    -----------------------------------------------------------------------------
-    
-    
-    ARMA (2,1) Summary:
-    
-                                  ARMA Model Results                              
-    ==============================================================================
-    Dep. Variable:              Avg_Price   No. Observations:                  270
-    Model:                     ARMA(1, 0)   Log Likelihood               -2357.617
-    Method:                       css-mle   S.D. of innovations           1496.002
-    Date:                Sun, 07 Mar 2021   AIC                           4721.234
-    Time:                        13:54:00   BIC                           4732.030
-    Sample:                    02-01-1996   HQIC                          4725.569
-                             - 07-01-2018                                         
-    ===================================================================================
-                          coef    std err          z      P>|z|      [0.025      0.975]
-    -----------------------------------------------------------------------------------
-    const            1445.7486    612.521      2.360      0.018     245.229    2646.268
-    ar.L1.Avg_Price     0.8545      0.031     27.400      0.000       0.793       0.916
-                                        Roots                                    
-    =============================================================================
-                      Real          Imaginary           Modulus         Frequency
-    -----------------------------------------------------------------------------
-    AR.1            1.1703           +0.0000j            1.1703            0.0000
-    -----------------------------------------------------------------------------
-    
-    
-    ARMA prediction vs true values
-
-
-
-![png](output_75_2.png)
-
-
-
-```python
-# ARMA model for zip code 97232
-model_arma(train_97232, arma_97232)
-```
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/tsa/base/tsa_model.py:162: ValueWarning: No frequency information was provided, so inferred frequency MS will be used.
-      % freq, ValueWarning)
-
-
-    ARMA (1,0)Summary:
-    
-                                  ARMA Model Results                              
-    ==============================================================================
-    Dep. Variable:              Avg_Price   No. Observations:                  270
-    Model:                     ARMA(1, 0)   Log Likelihood               -2391.671
-    Method:                       css-mle   S.D. of innovations           1698.075
-    Date:                Sun, 07 Mar 2021   AIC                           4789.342
-    Time:                        13:54:00   BIC                           4800.137
-    Sample:                    02-01-1996   HQIC                          4793.677
-                             - 07-01-2018                                         
-    ===================================================================================
-                          coef    std err          z      P>|z|      [0.025      0.975]
-    -----------------------------------------------------------------------------------
-    const            1644.5013    497.375      3.306      0.001     669.664    2619.338
-    ar.L1.Avg_Price     0.7950      0.037     21.486      0.000       0.722       0.868
-                                        Roots                                    
-    =============================================================================
-                      Real          Imaginary           Modulus         Frequency
-    -----------------------------------------------------------------------------
-    AR.1            1.2579           +0.0000j            1.2579            0.0000
-    -----------------------------------------------------------------------------
-    
-    
-    ARMA (2,1) Summary:
-    
-                                  ARMA Model Results                              
-    ==============================================================================
-    Dep. Variable:              Avg_Price   No. Observations:                  270
-    Model:                     ARMA(1, 0)   Log Likelihood               -2391.671
-    Method:                       css-mle   S.D. of innovations           1698.075
-    Date:                Sun, 07 Mar 2021   AIC                           4789.342
-    Time:                        13:54:00   BIC                           4800.137
-    Sample:                    02-01-1996   HQIC                          4793.677
-                             - 07-01-2018                                         
-    ===================================================================================
-                          coef    std err          z      P>|z|      [0.025      0.975]
-    -----------------------------------------------------------------------------------
-    const            1644.5013    497.375      3.306      0.001     669.664    2619.338
-    ar.L1.Avg_Price     0.7950      0.037     21.486      0.000       0.722       0.868
-                                        Roots                                    
-    =============================================================================
-                      Real          Imaginary           Modulus         Frequency
-    -----------------------------------------------------------------------------
-    AR.1            1.2579           +0.0000j            1.2579            0.0000
-    -----------------------------------------------------------------------------
-    
-    
-    ARMA prediction vs true values
-
-
-
-![png](output_76_2.png)
 
 
 ## ARIMA
 
 
-```python
-import itertools
-import statsmodels.api as sm
-from matplotlib.pylab import rcParams
-plt.style.use('ggplot')
-```
+1. Run through the best_pdq function to find the optimal pdq, pdqs based on the lowest aic. (commented out due to run time)
 
+2. Set variables for the following to use in the models. 
 
-```python
-# Create Dataframes that the model will be run on
-arima_97210 = temp.get_group(zip_focus[0]) 
-arima_97212 = temp.get_group(zip_focus[1]) 
-arima_97232 = temp.get_group(zip_focus[2])
-arima_97214 = temp.get_group(zip_focus[3]) 
-arima_97221 = temp.get_group(zip_focus[4])
-```
+ For zip code 97210: 
+ pdq         (1, 1, 2)
+ pdqs    (2, 2, 2, 12)
+ aic           3868.99
+ 
+ For zip code 97212:
+ pdq         (2, 0, 2)
+ pdqs    (2, 2, 2, 12)
+ aic           3812.43
 
+ For zip code 97214: 
+ pdq         (2, 0, 2)
+ pdqs    (2, 2, 2, 12)
+ aic           3739.48
 
-```python
-# Set index to the date
-arima_97210.set_index('Date', inplace=True)
-arima_97212.set_index('Date', inplace=True)
-arima_97232.set_index('Date', inplace=True)
-arima_97214.set_index('Date', inplace=True)
-arima_97221.set_index('Date', inplace=True)
-```
+ For zip code 97221:
+ pdq         (0, 1, 2)
+ pdqs    (2, 2, 2, 12)
+ aic           3778.14
 
+ For zip code 97232: 
+ pdq         (0, 1, 2)
+ pdqs    (2, 2, 2, 12)
+ aic           3828.61
 
-```python
-# # Runs through the function to find the optimal 
-# # pdq, pdqs based on the lowest aic. (commented out due to run time)
-
-# temp_pdq_10 = best_pdq(train_97210, 3)
-# temp_pdq_12 = best_pdq(train_97212, 3)
-# temp_pdq_14 = best_pdq(train_97214, 3)
-# temp_pdq_21 = best_pdq(train_97221, 3)
-# temp_pdq_32 = best_pdq(train_97232, 3)
-```
-
-
-```python
-# # Print pdq, pdqs, and corresponding aic. 
-
-# temp_pdq_10
-
-# # 
-# # pdq         (1, 1, 2)
-# # pdqs    (2, 2, 2, 12)
-# # aic           3868.99
-```
-
-
-```python
-# temp_pdq_12
-
-# # pdq         (2, 0, 2)
-# # pdqs    (2, 2, 2, 12)
-# # aic           3812.43
-# # Name: 566, dtype: object
-```
-
-
-```python
-# temp_pdq_14
-
-# # pdq         (2, 0, 2)
-# # pdqs    (2, 2, 2, 12)
-# # aic           3739.48
-```
-
-
-```python
-# temp_pdq_21
-
-# # pdq         (0, 1, 2)
-# # pdqs    (2, 2, 2, 12)
-# # aic           3778.14
-```
-
-
-```python
-# temp_pdq_32
-
-# # pdq         (0, 1, 2)
-# # pdqs    (2, 2, 2, 12)
-# # aic           3828.61
-```
-
-
-```python
-# Set pdq, pdqs based on above.
-
-# zip_97210
-pdq_10 = (0, 2, 2)
-pdqs_10 = (1, 0, 2, 12)
-
-# zip_97212
-pdq_12 = (2, 0, 2)
-pdqs_12 = (2, 2, 2, 12)
-
-# zip_97214
-pdq_14 = (2, 0, 2)
-pdqs_14 = (2, 2, 2, 12)
-
-# zip_97221
-pdq_21 = (0, 1, 2)
-pdqs_21 = (2, 2, 2, 12)
-
-# zip_97232
-pdq_32 = (0, 1, 2)
-pdqs_32 = (2, 2, 2, 12)
-```
 
 ### Models
 
+Run the ARIMA model function:
 
-```python
-# Run the ARIMA model for zip 97210 and save the forecast and rmse. 
-rmse_10, forecast_10 = arima(arima_97210, pdq_10, pdqs_10)
-```
+1. First it will output the traintest split data:
 
     Observations: 301
     Training Observations: 270
     Testing Observations: 31
 
+![png](images/output_89_2.png)
 
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/pandas/plotting/_compat.py:57: MatplotlibDeprecationWarning: 
-    The compare_versions function was deprecated in Matplotlib 3.2 and will be removed two minor releases later.
-      return matplotlib.compare_versions('2.0.0', matplotlib.__version__)
-
-
-
-![png](output_89_2.png)
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/tsa/base/tsa_model.py:162: ValueWarning: No frequency information was provided, so inferred frequency MS will be used.
-      % freq, ValueWarning)
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/base/model.py:568: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
-      "Check mle_retvals", ConvergenceWarning)
-
+2. It outputs the model data:
 
     ==============================================================================
                      coef    std err          z      P>|z|      [0.025      0.975]
@@ -1545,290 +944,40 @@ rmse_10, forecast_10 = arima(arima_97210, pdq_10, pdqs_10)
     sigma2      1.606e+05   5.42e+04      2.963      0.003    5.44e+04    2.67e+05
     ==============================================================================
 
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/pandas/plotting/_compat.py:57: MatplotlibDeprecationWarning: 
-    The compare_versions function was deprecated in Matplotlib 3.2 and will be removed two minor releases later.
-      return matplotlib.compare_versions('2.0.0', matplotlib.__version__)
+3. The model diagnostics:
 
 
-
-![png](output_89_6.png)
-
+![png](images/output_89_6.png)
 
 
-![png](output_89_7.png)
+4. It outputs a plot of the actual values vs the our model's prediction.
 
+
+
+![png](images/output_89_7.png)
+
+5. The mse amd rmse are displayed.
 
     The MSE of our predictions is 144340611.02
     The RMSE of our predictions is 12014.18
 
+6. Finally a plot of our model's forecast is displayed. 
 
+![png](images/output_89_9.png)
 
-![png](output_89_9.png)
 
 
-
-```python
-# Run the ARIMA model for zip 97212 and save the forecast and rmse
-rmse_12, forecast_12 = arima(arima_97212, pdq_12, pdqs_12)
-```
-
-    Observations: 301
-    Training Observations: 270
-    Testing Observations: 31
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/pandas/plotting/_compat.py:57: MatplotlibDeprecationWarning: 
-    The compare_versions function was deprecated in Matplotlib 3.2 and will be removed two minor releases later.
-      return matplotlib.compare_versions('2.0.0', matplotlib.__version__)
-
-
-
-![png](output_90_2.png)
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/tsa/base/tsa_model.py:162: ValueWarning: No frequency information was provided, so inferred frequency MS will be used.
-      % freq, ValueWarning)
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/base/model.py:568: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
-      "Check mle_retvals", ConvergenceWarning)
-
-
-    ==============================================================================
-                     coef    std err          z      P>|z|      [0.025      0.975]
-    ------------------------------------------------------------------------------
-    ar.L1          1.5262      0.300      5.085      0.000       0.938       2.114
-    ar.L2         -0.5339      0.298     -1.793      0.073      -1.118       0.050
-    ma.L1          0.0821      0.336      0.245      0.807      -0.576       0.740
-    ma.L2          0.2208      0.173      1.274      0.203      -0.119       0.560
-    ar.S.L12      -0.8005      0.793     -1.010      0.312      -2.354       0.753
-    ar.S.L24      -0.1145      0.493     -0.232      0.817      -1.081       0.853
-    ma.S.L12      -0.5623      0.776     -0.725      0.468      -2.082       0.958
-    ma.S.L24      -0.1783      0.616     -0.289      0.772      -1.386       1.030
-    sigma2      2.276e+07   6.47e-08   3.52e+14      0.000    2.28e+07    2.28e+07
-    ==============================================================================
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/pandas/plotting/_compat.py:57: MatplotlibDeprecationWarning: 
-    The compare_versions function was deprecated in Matplotlib 3.2 and will be removed two minor releases later.
-      return matplotlib.compare_versions('2.0.0', matplotlib.__version__)
-
-
-
-![png](output_90_6.png)
-
-
-
-![png](output_90_7.png)
-
-
-    The MSE of our predictions is 366034627.3
-    The RMSE of our predictions is 19132.03
-
-
-
-![png](output_90_9.png)
-
-
-
-```python
-# Run the ARIMA model for zip 97214 and save the forecast and rmse 
-rmse_14, forecast_14 = arima(arima_97214, pdq_14, pdqs_14)
-```
-
-    Observations: 301
-    Training Observations: 270
-    Testing Observations: 31
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/pandas/plotting/_compat.py:57: MatplotlibDeprecationWarning: 
-    The compare_versions function was deprecated in Matplotlib 3.2 and will be removed two minor releases later.
-      return matplotlib.compare_versions('2.0.0', matplotlib.__version__)
-
-
-
-![png](output_91_2.png)
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/tsa/base/tsa_model.py:162: ValueWarning: No frequency information was provided, so inferred frequency MS will be used.
-      % freq, ValueWarning)
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/base/model.py:568: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
-      "Check mle_retvals", ConvergenceWarning)
-
-
-    ==============================================================================
-                     coef    std err          z      P>|z|      [0.025      0.975]
-    ------------------------------------------------------------------------------
-    ar.L1          1.3509      0.057     23.862      0.000       1.240       1.462
-    ar.L2         -0.3799      0.058     -6.508      0.000      -0.494      -0.266
-    ma.L1          0.2886      0.137      2.105      0.035       0.020       0.557
-    ma.L2          0.2327      0.127      1.827      0.068      -0.017       0.482
-    ar.S.L12      -1.3450      0.153     -8.816      0.000      -1.644      -1.046
-    ar.S.L24      -0.4913      0.159     -3.099      0.002      -0.802      -0.181
-    ma.S.L12       0.3167      0.060      5.279      0.000       0.199       0.434
-    ma.S.L24      -0.8342      0.050    -16.616      0.000      -0.933      -0.736
-    sigma2      2.003e+07   1.48e-09   1.35e+16      0.000       2e+07       2e+07
-    ==============================================================================
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/pandas/plotting/_compat.py:57: MatplotlibDeprecationWarning: 
-    The compare_versions function was deprecated in Matplotlib 3.2 and will be removed two minor releases later.
-      return matplotlib.compare_versions('2.0.0', matplotlib.__version__)
-
-
-
-![png](output_91_6.png)
-
-
-
-![png](output_91_7.png)
-
-
-    The MSE of our predictions is 884297182.83
-    The RMSE of our predictions is 29737.13
-
-
-
-![png](output_91_9.png)
-
-
-
-```python
-# Run the ARIMA model for zip 97221 and save the forecast and rmse
-rmse_21, forecast_21 = arima(arima_97221, pdq_21, pdqs_21)
-```
-
-    Observations: 301
-    Training Observations: 270
-    Testing Observations: 31
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/pandas/plotting/_compat.py:57: MatplotlibDeprecationWarning: 
-    The compare_versions function was deprecated in Matplotlib 3.2 and will be removed two minor releases later.
-      return matplotlib.compare_versions('2.0.0', matplotlib.__version__)
-
-
-
-![png](output_92_2.png)
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/tsa/base/tsa_model.py:162: ValueWarning: No frequency information was provided, so inferred frequency MS will be used.
-      % freq, ValueWarning)
-
-
-    ==============================================================================
-                     coef    std err          z      P>|z|      [0.025      0.975]
-    ------------------------------------------------------------------------------
-    ma.L1          0.6579      0.164      4.013      0.000       0.337       0.979
-    ma.L2          0.3833      0.124      3.087      0.002       0.140       0.627
-    ar.S.L12      -1.2142      0.633     -1.918      0.055      -2.455       0.027
-    ar.S.L24      -0.3990      0.417     -0.957      0.338      -1.216       0.418
-    ma.S.L12      -0.0695      0.564     -0.123      0.902      -1.175       1.036
-    ma.S.L24      -0.5201      0.428     -1.215      0.224      -1.359       0.319
-    sigma2      1.842e+07    1.3e-08   1.42e+15      0.000    1.84e+07    1.84e+07
-    ==============================================================================
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/pandas/plotting/_compat.py:57: MatplotlibDeprecationWarning: 
-    The compare_versions function was deprecated in Matplotlib 3.2 and will be removed two minor releases later.
-      return matplotlib.compare_versions('2.0.0', matplotlib.__version__)
-
-
-
-![png](output_92_6.png)
-
-
-
-![png](output_92_7.png)
-
-
-    The MSE of our predictions is 507968226.6
-    The RMSE of our predictions is 22538.15
-
-
-
-![png](output_92_9.png)
-
-
-
-```python
-# Run the ARIMA model for zip 97232 and save the forecast and rmse
-rmse_32, forecast_32 = arima(arima_97232, pdq_32, pdqs_32)
-```
-
-    Observations: 301
-    Training Observations: 270
-    Testing Observations: 31
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/pandas/plotting/_compat.py:57: MatplotlibDeprecationWarning: 
-    The compare_versions function was deprecated in Matplotlib 3.2 and will be removed two minor releases later.
-      return matplotlib.compare_versions('2.0.0', matplotlib.__version__)
-
-
-
-![png](output_93_2.png)
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/tsa/base/tsa_model.py:162: ValueWarning: No frequency information was provided, so inferred frequency MS will be used.
-      % freq, ValueWarning)
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/statsmodels/base/model.py:568: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
-      "Check mle_retvals", ConvergenceWarning)
-
-
-    ==============================================================================
-                     coef    std err          z      P>|z|      [0.025      0.975]
-    ------------------------------------------------------------------------------
-    ma.L1          0.5424      0.058      9.329      0.000       0.428       0.656
-    ma.L2          0.3248      0.063      5.179      0.000       0.202       0.448
-    ar.S.L12      -1.5896      0.063    -25.184      0.000      -1.713      -1.466
-    ar.S.L24      -0.6836      0.056    -12.317      0.000      -0.792      -0.575
-    ma.S.L12       0.1481      0.046      3.235      0.001       0.058       0.238
-    ma.S.L24      -0.6538      0.050    -13.040      0.000      -0.752      -0.556
-    sigma2      8.387e+06   2.41e-09   3.48e+15      0.000    8.39e+06    8.39e+06
-    ==============================================================================
-
-
-    /Users/Crisitna/anaconda3/envs/learn-env/lib/python3.6/site-packages/pandas/plotting/_compat.py:57: MatplotlibDeprecationWarning: 
-    The compare_versions function was deprecated in Matplotlib 3.2 and will be removed two minor releases later.
-      return matplotlib.compare_versions('2.0.0', matplotlib.__version__)
-
-
-
-![png](output_93_6.png)
-
-
-
-![png](output_93_7.png)
-
-
-    The MSE of our predictions is 385480784.48
-    The RMSE of our predictions is 19633.66
-
-
-
-![png](output_93_9.png)
+This is repeated for the other 4 zip codes. 
 
 
 ### Return on Investment
 
-
-```python
-# Run ROI fuction for 97210 and save to a variable. Print the tail.
-
-ROI_10 = ROI(forecast_10, arima_97210, '2021-01-01')
-print(rmse_10)
-ROI_10.tail(10)
-```
+Now we can run the forecasts our models produced to plot the average return on investment for the focus zip codes.
 
 
-![png](output_95_0.png)
+Zip code: 97210
 
-
-    12014.183743421032
-
-
-
-
+![png](images/output_95_0.png)
 
     2023-09-01     8.40
     2023-10-01     8.65
@@ -1843,25 +992,9 @@ ROI_10.tail(10)
     Freq: MS, dtype: float64
 
 
+Zip code: 97212
 
-
-```python
-# Run ROI fuction for 97212 and save to a variable. Print the tail.
-
-ROI_12 = ROI(forecast_12, arima_97212, '2021-01-01')
-print(rmse_12)
-ROI_12.tail(10)
-```
-
-
-![png](output_96_0.png)
-
-
-    19132.031447220725
-
-
-
-
+![png](images/output_96_0.png)
 
     2023-09-01    0.00
     2023-10-01   -0.17
@@ -1877,24 +1010,10 @@ ROI_12.tail(10)
 
 
 
-
-```python
-# Run ROI fuction for 97214 and save to a variable. Print the tail.
-
-ROI_14 = ROI(forecast_14, arima_97214, '2021-01-01')
-print(rmse_14)
-ROI_14.tail(10)
-```
+Zip code: 97214
 
 
 ![png](output_97_0.png)
-
-
-    29737.13474476295
-
-
-
-
 
     2023-09-01    11.78
     2023-10-01    12.29
@@ -1909,25 +1028,9 @@ ROI_14.tail(10)
     Freq: MS, dtype: float64
 
 
+Zip code: 97221
 
-
-```python
-# Run ROI fuction for 97221 and save to a variable. Print the tail.
-
-ROI_21 = ROI(forecast_21, arima_97221, '2021-01-01')
-print(rmse_21)
-ROI_21.tail(10)
-```
-
-
-![png](output_98_0.png)
-
-
-    22538.150469760723
-
-
-
-
+![png](images/output_98_0.png)
 
     2023-09-01    2.14
     2023-10-01    1.87
@@ -1942,25 +1045,10 @@ ROI_21.tail(10)
     Freq: MS, dtype: float64
 
 
+Zip code: 97232
 
 
-```python
-# Run ROI fuction for 97232 and save to a variable. Print the tail.
-
-ROI_32 = ROI(forecast_32, arima_97232, '2021-01-01')
-print(rmse_32)
-ROI_32.tail(10)
-```
-
-
-![png](output_99_0.png)
-
-
-    19633.66457079137
-
-
-
-
+![png](images/output_99_0.png)
 
     2023-09-01   -13.71
     2023-10-01   -14.22
