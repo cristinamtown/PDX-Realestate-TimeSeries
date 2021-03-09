@@ -1003,7 +1003,7 @@ Zip code: 97212
 Zip code: 97214
 
 
-![png](output_97_0.png)
+![png](images/output_97_0.png)
 
     2023-09-01    11.78
     2023-10-01    12.29
