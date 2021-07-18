@@ -1,7 +1,7 @@
 # Business Case:
 
 
-In this notebook we aim to answer the following questions using real-estate data from Zillow:
+In this notebook we aim to answer the followering real-estate investment questions using Portland real-estate data from Zillow:
 - Which Portland zipcodes should we focus on when deciding to invest in real-estate?
 - Which of our focus zipcodes have the highest ROI potential?
 - Which of our focus zipcodes have the lowest risk?
@@ -207,13 +207,6 @@ Time frame: 1996-01-01 to 2020-01-01
 
 
 Now that we have a basic idea of the data, we need to start filtering for Portland, Oregon. Since there are multiple Portlands in the United States, we will first drop any rows that are outside of Oregon. Then we can create our Portland dataframe and print the head to quickly check that it worked the way we wanted it to.
-
-
-```python
-df_port = df_or.copy()
-df_port = df_port[df_port.City == 'Portland']
-df_port.head()
-```
 
 
 
