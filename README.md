@@ -552,26 +552,6 @@ Now that we have the five zipcodes we are focusing on, we will create some funct
 ## train_test_split
 Will split data fed into the function into 90/10 train/test ratio. 
 
-It returns train and test datasets and plots the break up.
-
-
-```python
-def train_test_split(data):
-    """Returns train, test data points
-    data split into .90 train and .10 test """
-    
-    X = data
-    train_size = int(len(X) * 0.90)
-    train, test = X[0:train_size], X[train_size:len(X)]
-    print('Observations: %d' % (len(X)))
-    print('Training Observations: %d' % (len(train)))
-    print('Testing Observations: %d' % (len(test)))
-    plt.plot(train)
-    plt.plot(test)
-    plt.title("Train/Test Breakup")
-    plt.show()
-    return train, test
-```
 
 ## arma_prep
 Prepares datasets to be run on the arma model. It includes performing .diff() to detrend the data, printing histogram before and after detrending the data. 
