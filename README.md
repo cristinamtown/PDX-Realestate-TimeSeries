@@ -1,7 +1,7 @@
 # Business Case:
 
 
-In this notebook we aim to answer the followering real-estate investment questions using Portland real-estate data from Zillow:
+In this notebook we aim to answer the followering real-estate investment questions using Portland real-estate data from Zillow in order to make better informed decisions when purchasing real-estate in Portland, Oregon:
 - Which Portland zipcodes should we focus on when deciding to invest in real-estate?
 - Which of our focus zipcodes have the highest ROI potential?
 - Which of our focus zipcodes have the lowest risk?
@@ -680,12 +680,14 @@ def best_pdq(data, upper_range):
     return ans_df.loc[ans_df['aic'].idxmin()]
 ```
 
-## arima model
-- This function prepares the data for the model by splitting the data 90/10 into train and test data sets. It then plots the split. 
-- It then inputs the given parameters and the train data into the ARIMA model.
-- It fits the model and prints the results.
-- Next it runs and plots model diagnostics
-- It runs predictions and compares it to the test data.
+## arima model function
+This function prepares the data for modeling by: 
+- Splitting the data 90/10 into train and test data sets. 
+- Visualizing the split with a plot. 
+- Inputs the given parameters and the train data into the ARIMA model.
+- Fits the model and prints the results.
+- Runs and plots model diagnostics
+- Runs predictions and compares it to the test data.
 - Calculates and returns the rsme
 - Forecasts 72 months out using the model and plots the forecast.
 
@@ -794,7 +796,7 @@ def arima(data, series_order, season_order):
 
 ## ROI 
 
-This function calculates and the ROI based on the forecast in the ARIMA model. It plots and returns ROI as a dataframe.
+This function calculates the ROI based on the forecast in the ARIMA model. It plots and returns ROI as a dataframe so it can easily be called upon later.
 
 
 
